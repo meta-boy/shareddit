@@ -21,7 +21,6 @@ class ConcreteRedditRespository implements RedditRepository {
     Post post;
     try {
       http.Response response = await http.get(url + '.json');
-
       post = await download(response);
     } catch (e) {}
     return post;
@@ -32,7 +31,7 @@ class ConcreteRedditRespository implements RedditRepository {
     Post post;
     String filePath, previewPath, title, subreddit;
     var media = data[0]['data']['children'][0]['data']['media'];
-
+    print(data);
     if (media != null) {
       if (media['is_video']) {
         var thing = VideoListing.fromJson(data[0]).data.children[0].data;
@@ -42,22 +41,22 @@ class ConcreteRedditRespository implements RedditRepository {
 
         String dir = (await getDownloadsDirectory()).path;
         RegExp exp = RegExp(r'https:\/\/v.redd.it\/.+?\/');
-        String audioUrl =
-            exp.stringMatch(thing.media.redditVideo.fallbackUrl) + 'audio';
-        final video = await FlutterDownloader.enqueue(
-          url: thing.media.redditVideo.fallbackUrl,
-          savedDir: dir,
-          showNotification: true,
-          openFileFromNotification: false,
-        );
+        // String audioUrl =
+        //     exp.stringMatch(thing.media.redditVideo.fallbackUrl) + 'audio';
+        // final video = await FlutterDownloader.enqueue(
+        //   url: thing.media.redditVideo.fallbackUrl,
+        //   savedDir: dir,
+        //   showNotification: true,
+        //   openFileFromNotification: false,
+        // );
 
-        final audio = await FlutterDownloader.enqueue(
-          url: audioUrl,
-          savedDir:
-              'the path of directory where you want to save downloaded files',
-          showNotification: true,
-          openFileFromNotification: false,
-        );
+        // final audio = await FlutterDownloader.enqueue(
+        //   url: audioUrl,
+        //   savedDir:
+        //       'the path of directory where you want to save downloaded files',
+        //   showNotification: true,
+        //   openFileFromNotification: false,
+        // );
 
         // TODO: Merge Audio and Video, then save the file
       } else {
@@ -77,6 +76,8 @@ class ConcreteRedditRespository implements RedditRepository {
       // TODO: Save Image
 
     }
+
+    print([previewPath, title, subreddit]);
 
     return post;
   }
